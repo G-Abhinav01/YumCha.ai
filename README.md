@@ -10,4 +10,4 @@ This project is licensed under the **Creative Commons BY-NC-ND 4.0** license.
 
 I retain full rights over this code and project. For the full legal terms, please see the [LICENSE](LICENSE) file.
 
-For **collaborations, licensing, or business inquiries**, feel free to reach out via [email](mailto:abhinav.achiver01@gmail.com) or [LinkedIn](www.linkedin.com/in/g-abhinav-138a39252).
+For **collaborations, licensing, or business inquiries**, feel free to reach out via [email](mailto:abhinav.achiver01@gmail.com) or [LinkedIn](https://linkedin.com/in/g-abhinav-138a39252).
