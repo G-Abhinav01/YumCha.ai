@@ -877,26 +877,111 @@ h1.glitch-text {
     color: #ccc;
 }
 
-/* Loading Overlay */
+/* --- LOADING OVERLAY & ANIMATION --- */
 #loading-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(5, 5, 5, 0.95);
-    z-index: 9999;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 2000;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.cooking-gif {
+    width: 200px;
+    /* Adjust as needed */
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 0 30px rgba(0, 255, 200, 0.2);
+}
+
+/* Glossy Box for Text */
+.glossy-loading-box {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow:
+        0 4px 30px rgba(0, 0, 0, 0.1),
+        inset 0 0 20px rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    padding: 20px 40px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Removed min-width to allow shrinking, added max-width for safety */
+    max-width: 90%;
+    position: relative;
+    /* overflow: hidden;  <-- REMOVED to prevent text clipping */
+}
+
+/* Shiny moving effect on the box border/bg */
+.glossy-loading-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.1),
+            transparent);
+    animation: shineBox 3s infinite;
+}
+
+@keyframes shineBox {
+    0% {
+        left: -100%;
+    }
+
+    50% {
+        left: 100%;
+    }
+
+    100% {
+        left: 100%;
+    }
 }
 
 .loading-text {
-    margin-top: 20px;
-    color: var(--accent-cyan);
-    font-size: 1.2rem;
-    letter-spacing: 2px;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(0, 255, 200, 0.5);
+    margin: 0;
+    font-family: 'Outfit', sans-serif;
+    /* Modern font */
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    /* Prevent wrapping */
+}
+
+.cursor {
+    display: inline-block;
+    width: 3px;
+    height: 24px;
+    background-color: #00bcd4;
+    margin-left: 5px;
+    animation: blink 0.8s infinite;
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
 }
 
 @media (max-width: 600px) {

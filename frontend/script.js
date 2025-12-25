@@ -13,6 +13,100 @@ const state = {
     inputMethod: 'text', // 'text' or 'image'
 };
 
+// --- Audio Effects ---
+// --- Audio Effects ---
+const cookingAudio = new Audio('./audio/CookingSound.mp3');
+cookingAudio.loop = true;
+cookingAudio.addEventListener('canplaythrough', () => console.log("Audio loaded successfully"));
+cookingAudio.addEventListener('error', (e) => console.error("Audio Load Error:", e));
+
+// --- Typewriter Animation Logic ---
+const phrases = [
+    "Relax. The stove knows what it's doing...",
+    "Trust the process. Let it simmer...",
+    "Bro said ‘let him cook’… so we did.",
+    "Stand back. This might slap 🔥"
+];
+
+let typerState = {
+    timeoutId: null,
+    phraseIndex: 0,
+    charIndex: 0,
+    isDeleting: false
+};
+
+function typeLoop() {
+    try {
+        const textElement = document.getElementById('typing-text');
+        if (!textElement) {
+            console.warn("Typer: Text element not found!");
+            return;
+        }
+
+        const currentPhrase = phrases[typerState.phraseIndex];
+        let speed = 50;
+
+        // Debug Log
+        console.log(`Typer: '${currentPhrase}' Idx:${typerState.charIndex} Del:${typerState.isDeleting}`);
+
+        if (typerState.isDeleting) {
+            typerState.charIndex--;
+            speed = 30;
+        } else {
+            typerState.charIndex++;
+            speed = 50;
+        }
+
+        // Clamp logic
+        if (typerState.charIndex > currentPhrase.length) typerState.charIndex = currentPhrase.length;
+        if (typerState.charIndex < 0) typerState.charIndex = 0;
+
+        // Render
+        const sub = currentPhrase.substring(0, typerState.charIndex);
+        textElement.textContent = sub;
+
+        // Check if we render correctly
+        if (textElement.textContent !== sub) {
+            console.error("Typer Render Mismatch:", textElement.textContent, sub);
+        }
+
+        // Next State Logic
+        if (!typerState.isDeleting && typerState.charIndex === currentPhrase.length) {
+            typerState.isDeleting = true;
+            speed = 2000;
+        } else if (typerState.isDeleting && typerState.charIndex === 0) {
+            typerState.isDeleting = false;
+            typerState.phraseIndex = (typerState.phraseIndex + 1) % phrases.length;
+            speed = 500;
+        }
+
+        // Recursion
+        typerState.timeoutId = setTimeout(typeLoop, speed);
+    } catch (e) {
+        console.error("Typer CRASH:", e);
+    }
+}
+
+function startTyper() {
+    if (typerState.timeoutId) clearTimeout(typerState.timeoutId);
+    console.log("Typer Started");
+
+    typerState.phraseIndex = 0;
+    typerState.charIndex = 0;
+    typerState.isDeleting = false;
+
+    // Clear text immediately
+    const el = document.getElementById('typing-text');
+    if (el) el.textContent = '';
+
+    typeLoop();
+}
+
+function stopTyper() {
+    if (typerState.timeoutId) clearTimeout(typerState.timeoutId);
+}
+
+
 function switchMode(mode) {
     state.inputMethod = mode;
 
@@ -62,12 +156,20 @@ async function generateRecipes() {
         formData.append('image', fileInput.files[0]);
     }
 
-    // UI Loading
+    // UI Loading & Audio Start
     loadingOverlay.classList.remove('hidden');
     resultsSection.classList.add('hidden');
     recipeGrid.innerHTML = ''; // Clear previous
 
+    // Start Typer
+    startTyper();
+
+    // Fire and forget audio (don't await, don't block)
+    cookingAudio.currentTime = 0;
+    cookingAudio.play().catch(e => console.warn("Audio Autoplay blocked:", e));
+
     try {
+        // ... API call starts here ...
         let options = { method: 'POST', body: formData };
         const response = await fetch('/api/generate', options);
         const data = await response.json();
@@ -84,6 +186,10 @@ async function generateRecipes() {
         console.error("Error:", error);
         alert("Something went wrong. Check console.");
     } finally {
+        // Stop Audio & Typer & Hide Loading
+        stopTyper();
+        cookingAudio.pause();
+        cookingAudio.currentTime = 0;
         loadingOverlay.classList.add('hidden');
     }
 }
@@ -213,3 +319,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 });
+
+
