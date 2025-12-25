@@ -1,0 +1,910 @@
+:root {
+    /* Updated Palette based on user preference (Dark Teal/Cyan vibe) */
+    --bg-dark: #050505;
+    --bg-gradient-start: #081b1f;
+    /* Deep Dark Teal */
+    --bg-gradient-end: #000000;
+
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-highlight: rgba(255, 255, 255, 0.15);
+
+    --accent-cyan: #00bcd4;
+    --accent-glow: rgba(0, 188, 212, 0.6);
+    --accent-gold: #FFD700;
+
+    --text-primary: #ffffff;
+    --text-secondary: #b3b3b3;
+
+    --font-main: 'Outfit', sans-serif;
+}
+
+body {
+    background: radial-gradient(circle at top, var(--bg-gradient-start), var(--bg-gradient-end) 90%);
+    background-attachment: fixed;
+    color: var(--text-primary);
+    font-family: var(--font-main);
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+/* --- NavBar --- */
+/* --- LIQUID GLASS NAVBAR --- */
+.glass-nav {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    /* Default: Thinner & Rounder */
+    width: 60%;
+    /* Start smaller width for aesthetics */
+    max-width: 800px;
+    padding: 10px 30px;
+    /* Thinner height */
+    z-index: 1000;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    /* Liquid Glass Effect */
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 50px;
+    /* Pill Shape */
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+
+    /* Smooth Transitions for Scroll Effect (Slower/Premium) */
+    transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+    /* Hide content when shrinking */
+}
+
+/* Scrolled State: Compact & Top Left */
+.glass-nav.scrolled {
+    width: 50px;
+    /* Shrink to circle/pill */
+    padding: 10px;
+    /* Minimal padding */
+    left: 30px;
+    /* Move to left */
+    transform: translateX(0);
+    /* Remove centering */
+    border-radius: 50%;
+    /* Circle shape */
+    background: rgba(255, 255, 255, 0.1);
+    justify-content: center;
+    /* Center the icon */
+    cursor: pointer;
+}
+
+/* Nav Links Container */
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    opacity: 1;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    white-space: nowrap;
+}
+
+/* Hide links on scroll */
+.glass-nav.scrolled .nav-links {
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    /* Take out of flow */
+    transform: translateX(20px);
+}
+
+.glass-nav.scrolled .logo-container {
+    opacity: 0;
+    pointer-events: none;
+    display: none;
+}
+
+/* Text Links */
+.nav-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--text-primary);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* Nav Social Icon (Resized for Navbar) */
+.nav-social-btn {
+    width: 35px;
+    /* Slightly smaller to fit thinner nav */
+    height: 35px;
+    font-size: 16px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Make sure .social-btn styles apply correctly in this context if they weren't global enough */
+/* The existing .social-btn class does a lot of work (glow, bg, etc). 
+   We just resized it above. */
+
+/* Menu Icon (Hidden by default) */
+.menu-icon-container {
+    display: none;
+    color: #fff;
+    font-size: 1.2rem;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.3s ease 0.3s;
+    /* Delay fade in */
+}
+
+/* Show Menu Icon on Scroll */
+.glass-nav.scrolled .menu-icon-container {
+    display: block;
+    opacity: 1;
+}
+
+.glass-nav.scrolled:hover {
+    transform: scale(1.1);
+    /* Hover effect for the collapsed menu */
+}
+
+/* Hover effect on logo */
+.logo-container span {
+    background: linear-gradient(to right, #ffffff, #00bcd4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    cursor: pointer;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.logo-container {
+    font-weight: 800;
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+    color: var(--text-primary);
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nav-logo {
+    height: 40px;
+    border-radius: 5px;
+}
+
+/* Fallback if image used in nav */
+
+/* --- Hero Banner (16:9 ish) --- */
+.hero-banner {
+    width: 100%;
+    min-height: 80vh;
+    /* Large banner feel */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    background: radial-gradient(circle at center, rgba(0, 188, 212, 0.1), transparent 70%);
+}
+
+.hero-content {
+    text-align: center;
+    z-index: 2;
+    padding: 20px;
+    animation: fadeIn 1.5s ease;
+}
+
+.hero-logo {
+    max-width: 400px;
+    width: 80%;
+    height: auto;
+    filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.5));
+    margin-bottom: 20px;
+}
+
+h1.glitch-text {
+    font-size: 3.5rem;
+    margin: 10px 0;
+    background: linear-gradient(to right, #ffffff, #00bcd4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 30px rgba(0, 188, 212, 0.3);
+}
+
+.subtitle {
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+    margin-top: 10px;
+}
+
+/* --- Liquid Glass Container --- */
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    position: relative;
+    z-index: 10;
+}
+
+/* --- Inputs & Glass Effect --- */
+.input-toggle {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.toggle-btn {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--glass-border);
+    color: var(--text-secondary);
+    padding: 12px 30px;
+    border-radius: 30px;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    transition: all 0.4s ease;
+    font-family: var(--font-main);
+    letter-spacing: 1px;
+}
+
+.toggle-btn.active,
+.toggle-btn:hover {
+    background: rgba(0, 188, 212, 0.1);
+    color: var(--accent-cyan);
+    border-color: var(--accent-cyan);
+    box-shadow: 0 0 15px rgba(0, 188, 212, 0.2);
+}
+
+.glass-input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.03);
+    /* Translucent */
+    border: 1px solid var(--glass-border);
+    padding: 18px;
+    border-radius: 15px;
+    color: white;
+    font-family: var(--font-main);
+    font-size: 1rem;
+    margin-bottom: 20px;
+    backdrop-filter: blur(12px);
+    transition: 0.3s;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.glass-input:focus {
+    border-color: var(--accent-cyan);
+    background: rgba(255, 255, 255, 0.06);
+    outline: none;
+    box-shadow: 0 0 15px rgba(0, 188, 212, 0.15);
+}
+
+.upload-box {
+    border: 2px dashed var(--glass-border);
+    padding: 50px;
+    text-align: center;
+    border-radius: 15px;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.01);
+    backdrop-filter: blur(5px);
+    transition: 0.3s;
+    color: var(--text-secondary);
+}
+
+.upload-box:hover {
+    border-color: var(--accent-cyan);
+    color: var(--accent-cyan);
+    background: rgba(0, 188, 212, 0.05);
+}
+
+/* Filters Layout */
+.filters-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.filter-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.toggle-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    cursor: pointer;
+}
+
+.toggle-label {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    user-select: none;
+}
+
+/* --- User Provided Toggle Switch (Wrapper 41) --- */
+.checkbox-wrapper-41 {
+    /* Scaled down from 100px to 60px to fit UI better */
+    --size: 60px;
+}
+
+.checkbox-wrapper-41 input[type="checkbox"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: var(--size);
+    height: calc(var(--size) / 2);
+    background-color: #fff;
+    border: 3px solid #222;
+    border-radius: 30px 100px 100px 100px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.5s;
+    display: block;
+    /* Ensure visibility */
+}
+
+.checkbox-wrapper-41 input[type="checkbox"]::before {
+    content: "";
+    position: absolute;
+    width: calc(var(--size) / 2);
+    height: calc(var(--size) / 2);
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%) scale(0.7);
+    border: 3px solid #222;
+    border-radius: 30px 100px 100px 100px;
+    background-color: #fde881;
+    /* Default Yellow Knob */
+    box-sizing: border-box;
+    transition: all 0.5s;
+}
+
+.checkbox-wrapper-41 input[type="checkbox"]:checked {
+    background-color: #fde881;
+    /* Active Yellow BG */
+    border-radius: 100px 100px 30px 100px;
+}
+
+.checkbox-wrapper-41 input[type="checkbox"]:checked::before {
+    left: 50%;
+    background-color: #fff;
+    /* Active White Knob */
+    border-radius: 100px 100px 30px 100px;
+}
+
+/* --- PREMIUM CTA BUTTON START --- */
+.cta-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+    position: relative;
+    padding: 10px;
+}
+
+.premium-cook-btn {
+    position: relative;
+    padding: 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-main);
+    z-index: 1;
+    border-radius: 60px;
+    /* Ensure no text selection to keep it clean */
+    user-select: none;
+}
+
+/* Button Body (Base: Summer Gradient) */
+.premium-cook-btn .btn-content {
+    display: block;
+    padding: 20px 40px;
+    font-size: 1.4rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #000;
+
+    /* IDLE: Summer Gradient */
+    background: linear-gradient(90deg, #ff8c00, #ffd700, #32cd32);
+    background-size: 200% 200%;
+    animation: gradientFlow 4s ease infinite;
+
+    border-radius: 60px;
+    position: relative;
+    z-index: 2;
+    transition: all 0.3s ease;
+
+    /* Liquid Glass */
+    box-shadow:
+        inset 0 2px 4px rgba(255, 255, 255, 0.6),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.2),
+        0 8px 15px rgba(0, 0, 0, 0.3);
+
+    overflow: hidden;
+}
+
+@keyframes gradientFlow {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* OVERLAY: Dark Premium Aesthetic (Fades in on Hover) */
+.premium-cook-btn .btn-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    /* Dark Gradient: Algae -> Teal -> Black */
+    background: linear-gradient(90deg, #0f1f1a, #0b3a34, #050707);
+
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: -1;
+}
+
+/* HOVER: Dark Aesthetic + RGB Gaming Glow */
+.premium-cook-btn:hover .btn-content {
+    color: #ffffff;
+    transform: scale(1.05);
+    /* RGB Gaming Lights Animation (Box Shadow Cycle) */
+    animation: rgbGlow 3s linear infinite;
+}
+
+/* RGB Gaming Lights Keyframes */
+@keyframes rgbGlow {
+    0% {
+        box-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
+    }
+
+    20% {
+        box-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff;
+    }
+
+    40% {
+        box-shadow: 0 0 10px #0000ff, 0 0 20px #0000ff;
+    }
+
+    60% {
+        box-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff;
+    }
+
+    80% {
+        box-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00;
+    }
+
+    100% {
+        box-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
+    }
+}
+
+/* Trigger Dark BG Fade In */
+.premium-cook-btn:hover .btn-content::before {
+    opacity: 1;
+}
+
+/* ROTATING BORDER TRAIL - REMOVED AS REQUESTED */
+.premium-cook-btn .btn-border-trail {
+    display: none;
+}
+
+/* Show Trail on Hover only - REMOVED */
+.premium-cook-btn:hover .btn-border-trail {
+    opacity: 0;
+    display: none;
+}
+
+@keyframes rotateTrail {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Depth shadow behind everything */
+.premium-cook-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 60px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    z-index: -2;
+}
+
+/* Interactions */
+.premium-cook-btn:active .btn-content {
+    transform: scale(0.95);
+}
+
+/* --- PREMIUM CTA BUTTON END --- */
+
+/* --- CUSTOM DROPDOWN (SELECTORS) START --- */
+.custom-select-wrapper {
+    position: relative;
+    user-select: none;
+    width: 100%;
+    margin-bottom: 20px;
+    /* spacing */
+}
+
+.custom-select-trigger {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px;
+    font-size: 1rem;
+    font-weight: 300;
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.custom-select-trigger:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 15px rgba(0, 188, 212, 0.1);
+}
+
+.custom-select-wrapper.open .custom-select-trigger {
+    border-color: var(--accent-cyan);
+    box-shadow: 0 0 15px rgba(0, 188, 212, 0.3);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.arrow {
+    transition: transform 0.3s ease;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.custom-select-wrapper.open .arrow {
+    transform: rotate(180deg);
+    color: var(--accent-cyan);
+}
+
+.custom-options {
+    position: absolute;
+    display: block;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: rgba(10, 10, 10, 0.95);
+    border: 1px solid var(--glass-border);
+    border-top: none;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    z-index: 50;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-10px);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+.custom-select-wrapper.open .custom-options {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: all;
+    transform: translateY(0);
+}
+
+.custom-option {
+    padding: 15px 20px;
+    font-size: 0.95rem;
+    color: #ccc;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+.custom-option:last-child {
+    border-bottom: none;
+}
+
+.custom-option:hover {
+    background: rgba(0, 188, 212, 0.1);
+    color: white;
+    padding-left: 25px;
+}
+
+.custom-option.selected {
+    background: rgba(0, 188, 212, 0.2);
+    color: var(--accent-cyan);
+    font-weight: 600;
+}
+
+/* --- CUSTOM DROPDOWN END --- */
+
+/* --- SOCIAL & FOOTER --- */
+.social-footer {
+    text-align: center;
+    padding: 60px 20px;
+    border-top: 1px solid var(--glass-border);
+    background: rgba(0, 0, 0, 0.2);
+    margin-top: 80px;
+}
+
+.social-footer h3 {
+    margin-bottom: 30px;
+    font-weight: 300;
+    color: var(--text-secondary);
+}
+
+.social-container {
+    display: flex;
+    gap: 18px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.social-btn {
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #eaeaea;
+    font-size: 22px;
+    text-decoration: none;
+    transition: all 0.35s ease;
+    box-shadow: 0 0 0 rgba(0, 255, 255, 0);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.social-btn:hover {
+    transform: translateY(-4px) scale(1.05);
+    color: #ffffff;
+    box-shadow: 0 0 12px rgba(0, 255, 255, 0.6), 0 0 24px rgba(0, 255, 255, 0.4);
+    border-color: rgba(0, 255, 255, 0.4);
+}
+
+.social-btn.active {
+    background: #00bcd4;
+    color: #ffffff;
+    box-shadow: 0 0 14px rgba(0, 188, 212, 0.9), 0 0 30px rgba(0, 188, 212, 0.6);
+}
+
+/* Animations & Utilities */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Checkbox Custom Styling for Premium Feel */
+.custom-checkbox {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.custom-checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.checkmark {
+    height: 20px;
+    width: 20px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    margin-right: 10px;
+    transition: 0.3s;
+    border: 1px solid var(--glass-border);
+}
+
+.custom-checkbox:hover .checkmark {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.custom-checkbox input:checked~.checkmark {
+    background-color: var(--accent-cyan);
+    border-color: var(--accent-cyan);
+    box-shadow: 0 0 10px var(--accent-glow);
+}
+
+.form-section {
+    display: none;
+    animation: fadeIn 0.5s ease;
+}
+
+.form-section.active {
+    display: block;
+}
+
+.hidden {
+    display: none !important;
+}
+
+#results-section {
+    max-width: 1200px;
+    margin: 40px auto;
+}
+
+.recipe-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.recipe-card {
+    background: rgba(30, 30, 30, 0.4);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: 20px;
+    padding: 25px;
+    transition: all 0.4s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.recipe-card:hover {
+    background: rgba(40, 40, 40, 0.6);
+    transform: translateY(-8px) scale(1.01);
+    border-color: var(--accent-cyan);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.recipe-card h3 {
+    color: var(--accent-cyan);
+    font-size: 1.5rem;
+    margin-top: 0;
+}
+
+.recipe-tags {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.tag {
+    background: rgba(0, 188, 212, 0.15);
+    color: var(--accent-cyan);
+    padding: 5px 12px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+}
+
+.like-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.like-btn:hover {
+    transform: scale(1.2);
+}
+
+.view-btn {
+    width: 100%;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: 0.3s;
+}
+
+.view-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--accent-cyan);
+    border-color: var(--accent-cyan);
+}
+
+.recipe_desc {
+    color: #ccc;
+}
+
+/* Loading Overlay */
+#loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(5, 5, 5, 0.95);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.loading-text {
+    margin-top: 20px;
+    color: var(--accent-cyan);
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+}
+
+@media (max-width: 600px) {
+    .filters-grid {
+        grid-template-columns: 1fr;
+    }
+
+    h1.glitch-text {
+        font-size: 2.5rem;
+    }
+}

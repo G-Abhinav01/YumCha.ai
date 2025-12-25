@@ -1,0 +1,77 @@
+/* --- LIQUID GLASS NAVBAR --- */
+.glass-nav {
+    position: fixed;
+    /* Fixed to stay on top */
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 1200px;
+    padding: 15px 30px;
+    z-index: 1000;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    /* Liquid Glass Effect */
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+
+    transition: all 0.3s ease;
+}
+
+/* Nav Links Container */
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+/* Text Links */
+.nav-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--text-primary);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* Nav Social Icon (Resized for Navbar) */
+.nav-social-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+    border-radius: 50%;
+    /* Align with other links */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* Inherits .social-btn styles but we override specific dimensions */
+}
+
+/* Hover effect on logo */
+.logo-container span {
+    background: linear-gradient(to right, #ffffff, #00bcd4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    cursor: pointer;
+}
+
+/* Ensure body has padding if nav is fixed? No, it overlays hero */
+/* But let's override the old absolute nav styles if necessary */
+nav {
+    /* Resetting previous 'absolute' if it conflicts, but .glass-nav class handles it */
+}
