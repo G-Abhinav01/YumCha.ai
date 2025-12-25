@@ -6,9 +6,13 @@
   <p>
     <img src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" alt="Maintained">
     <img src="https://img.shields.io/badge/Chef-Maharaj-orange.svg" alt="Chef Style">
-    <img src="https://img.shields.io/badge/Powered%20By-Gemini%201.5%20Flash-blue.svg" alt="Powered By">
+    <img src="https://img.shields.io/badge/Powered%20By-Gemini%202.5%20Flash-blue.svg" alt="Powered By">
   </p>
 </div>
+
+---
+
+[**Try YumCha.ai Live**](https://yumcha-ai-qle1.onrender.com/)
 
 ---
 
@@ -28,7 +32,7 @@
 ## 🛠️ Tech Stack
 - **Frontend**: HTML5, Vanilla CSS (Premium Glassmorphism), JavaScript (ES6+).
 - **Backend**: Node.js, Express.
-- **AI Engine**: Google Gemini 1.5 Flash (via `@google/generative-ai`).
+- **AI Engine**: Google Gemini 2.5 Flash (via `@google/generative-ai`).
 - **Styling**: Google Fonts (Outfit), Font Awesome.
 - **Deployment**: Optimized for **Vercel** and **Render.com**.
 
