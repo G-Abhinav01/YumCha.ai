@@ -28,82 +28,73 @@ const phrases = [
     "Stand back. This might slap 🔥"
 ];
 
-let typerState = {
-    timeoutId: null,
-    phraseIndex: 0,
-    charIndex: 0,
-    isDeleting: false
+// Global state for easy debugging
+window.typerInfo = {
+    timer: null,
+    pIdx: 0,
+    cIdx: 0,
+    deleting: false
 };
 
 function typeLoop() {
+    const el = document.getElementById('typing-text');
+    if (!el) return;
+
     try {
-        const textElement = document.getElementById('typing-text');
-        if (!textElement) {
-            console.warn("Typer: Text element not found!");
-            return;
-        }
+        const p = phrases[window.typerInfo.pIdx];
 
-        const currentPhrase = phrases[typerState.phraseIndex];
-        let speed = 50;
-
-        // Debug Log
-        console.log(`Typer: '${currentPhrase}' Idx:${typerState.charIndex} Del:${typerState.isDeleting}`);
-
-        if (typerState.isDeleting) {
-            typerState.charIndex--;
-            speed = 30;
+        // Update Indices
+        if (window.typerInfo.deleting) {
+            window.typerInfo.cIdx--;
         } else {
-            typerState.charIndex++;
-            speed = 50;
+            window.typerInfo.cIdx++;
         }
 
-        // Clamp logic
-        if (typerState.charIndex > currentPhrase.length) typerState.charIndex = currentPhrase.length;
-        if (typerState.charIndex < 0) typerState.charIndex = 0;
+        // Render Text
+        el.textContent = p.substring(0, window.typerInfo.cIdx);
 
-        // Render
-        const sub = currentPhrase.substring(0, typerState.charIndex);
-        textElement.textContent = sub;
+        // Determine Speed & State
+        let speed = window.typerInfo.deleting ? 30 : 50;
 
-        // Check if we render correctly
-        if (textElement.textContent !== sub) {
-            console.error("Typer Render Mismatch:", textElement.textContent, sub);
-        }
-
-        // Next State Logic
-        if (!typerState.isDeleting && typerState.charIndex === currentPhrase.length) {
-            typerState.isDeleting = true;
+        if (!window.typerInfo.deleting && window.typerInfo.cIdx === p.length) {
+            // End of Phrase
             speed = 2000;
-        } else if (typerState.isDeleting && typerState.charIndex === 0) {
-            typerState.isDeleting = false;
-            typerState.phraseIndex = (typerState.phraseIndex + 1) % phrases.length;
+            window.typerInfo.deleting = true;
+        } else if (window.typerInfo.deleting && window.typerInfo.cIdx === 0) {
+            // End of Deletion
+            window.typerInfo.deleting = false;
+            window.typerInfo.pIdx = (window.typerInfo.pIdx + 1) % phrases.length;
             speed = 500;
         }
 
-        // Recursion
-        typerState.timeoutId = setTimeout(typeLoop, speed);
-    } catch (e) {
-        console.error("Typer CRASH:", e);
+        window.typerInfo.timer = setTimeout(typeLoop, speed);
+
+    } catch (err) {
+        el.textContent = "Error: " + err.message;
+        el.style.color = "red";
+        console.error(err);
     }
 }
 
 function startTyper() {
-    if (typerState.timeoutId) clearTimeout(typerState.timeoutId);
-    console.log("Typer Started");
+    stopTyper();
 
-    typerState.phraseIndex = 0;
-    typerState.charIndex = 0;
-    typerState.isDeleting = false;
+    // Reset
+    window.typerInfo.pIdx = 0;
+    window.typerInfo.cIdx = 0;
+    window.typerInfo.deleting = false;
 
-    // Clear text immediately
     const el = document.getElementById('typing-text');
-    if (el) el.textContent = '';
+    if (el) {
+        el.textContent = "";
+        el.style.color = "#fff"; // Reset color
+    }
 
     typeLoop();
 }
 
 function stopTyper() {
-    if (typerState.timeoutId) clearTimeout(typerState.timeoutId);
+    if (window.typerInfo.timer) clearTimeout(window.typerInfo.timer);
 }
 
 
@@ -178,19 +169,29 @@ async function generateRecipes() {
             renderRecipes(data.recipes);
             resultsSection.classList.remove('hidden');
             resultsSection.scrollIntoView({ behavior: 'smooth' });
+            loadingOverlay.classList.add('hidden'); // Hide overlay on success
+            cookingAudio.pause();
+            stopTyper();
         } else {
-            alert("The Maharaj got confused. Please try again or check API Key.");
+            // Handle logical error (e.g. backend refused)
+            throw new Error(data.message || "The Maharaj got confused. Check API Key.");
         }
 
     } catch (error) {
         console.error("Error:", error);
-        alert("Something went wrong. Check console.");
-    } finally {
-        // Stop Audio & Typer & Hide Loading
-        stopTyper();
+        // Show error IN the box instead of alert
+        const textElement = document.getElementById('typing-text');
+        if (textElement) {
+            textElement.textContent = "Error: " + (error.message || "Something went wrong");
+            textElement.style.color = "#ff4444"; // Red for error
+        }
+        // Do NOT hide loadingOverlay so user can see the error
+        // But do stop the audio/animation
         cookingAudio.pause();
+        stopTyper();
+    } finally {
+        // Reset audio always
         cookingAudio.currentTime = 0;
-        loadingOverlay.classList.add('hidden');
     }
 }
 
