@@ -49,8 +49,12 @@ app.post('/api/generate', upload.single('image'), async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-    const keyStatus = (process.env.API_KEY || process.env.GEMINI_API_KEY) ? 'Active' : 'Missing API Key';
-    console.log(`Mode: ${keyStatus}`);
-});
+if (require.main === module) {
+    app.listen(PORT, () => {
+        console.log(`Server running on http://localhost:${PORT}`);
+        const keyStatus = (process.env.API_KEY || process.env.GEMINI_API_KEY) ? 'Active' : 'Missing API Key';
+        console.log(`Mode: ${keyStatus}`);
+    });
+}
+
+module.exports = app;

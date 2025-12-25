@@ -124,6 +124,7 @@ async function generateRecipes() {
 
     formData.append('jugaad', document.getElementById('jugaad-check').checked);
     formData.append('measurement', document.getElementById('measurement-check').checked ? 'local' : 'standard');
+    formData.append('language', document.getElementById('language-check').checked ? 'hinglish' : 'english');
 
     // Regions
     const regionVal = document.getElementById('region-input').value;
@@ -218,7 +219,7 @@ function renderRecipes(recipes) {
                     ${recipe.ingredients ? recipe.ingredients.map(i => `<li>${i}</li>`).join('') : '<li>See instructions</li>'}
                 </ul>
                 <h4>Instructions:</h4>
-                <p style="white-space: pre-line;">${recipe.instructions ? (Array.isArray(recipe.instructions) ? recipe.instructions.join('\n') : recipe.instructions) : ''}</p>
+                <p style="white-space: pre-line;">${recipe.instructions ? (Array.isArray(recipe.instructions) ? recipe.instructions.join('\n\n') : recipe.instructions) : ''}</p>
                 ${recipe.jugaad_tips ? `<p class="jugaad-tip">💡 <strong>Jugaad Tip:</strong> ${recipe.jugaad_tips}</p>` : ''}
             </div>
 
