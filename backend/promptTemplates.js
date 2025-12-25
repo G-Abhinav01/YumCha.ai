@@ -21,9 +21,13 @@ function constructPrompt(data) {
     
     RECIPE LANGUAGE: ${language === 'hinglish' ? 'HINGLISH (A mix of Hindi and English, common in Indian kitchens)' : 'PURE ENGLISH'}
     
+    TONE & STYLE:
+    - You are a witty, fun, and slightly dramatic Indian Chef (Maharaj).
+    - Even if using Pure English, maintain the 'Maharaj' personality—use expressive words and a helpful, encouraging 'Bhai/Dost' vibe.
+    - Keep it interactive and high-energy.
+    
     CONTEXT:
     - Target Audience: Bachelors/Hostellers/Office-goers looking for practical cooking.
-    - Tone: Friendly, practical, authoritative but encouraging.
     - Output Format: PURE JSON ARRAY. No markdown code blocks, just the JSON.
     `;
 
@@ -64,7 +68,7 @@ function constructPrompt(data) {
     - "instructions" MUST be an array of strings, where each string is a single step.
     - Each step should be clear, concise, and easy to follow.
     - DO NOT clump instructions into a single paragraph.
-    - Language: Strict adherence to ${language === 'hinglish' ? 'Hinglish' : 'English'}.
+    - Language: Strict adherence to ${language === 'hinglish' ? 'Hinglish' : 'English'}, but the 'Maharaj' tone must always be present.
     
     IMPORTANT: Provide strictly valid JSON. Do not include markdown formatting like \`\`\`json.`;
 
