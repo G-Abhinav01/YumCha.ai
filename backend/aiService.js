@@ -3,11 +3,19 @@ const { constructPrompt } = require("./promptTemplates");
 require("dotenv").config();
 
 // Initialize Gemini
-const genAI = new GoogleGenerativeAI(process.env.API_KEY || "YOUR_API_KEY_HERE");
+const apiKey = process.env.API_KEY || process.env.GEMINI_API_KEY;
+if (!apiKey) {
+    console.error("CRITICAL: API Key is missing in aiService.js!");
+} else {
+    console.log(`AI Service: API Key loaded (Starts with: ${apiKey.substring(0, 4)}...)`);
+}
+
+const genAI = new GoogleGenerativeAI(apiKey || "YOUR_API_KEY_HERE");
 
 async function generateRecipes(userData, imageBuffer = null, mimeType = null) {
     try {
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        // User explicitly requested gemini-2.5-flash
+        const model = genAI.getGenerativeModel({ model: "models/gemini-2.5-flash" });
 
         let prompt = constructPrompt(userData);
         let contentParts = [prompt];

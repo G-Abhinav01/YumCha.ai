@@ -45,11 +45,12 @@ app.post('/api/generate', upload.single('image'), async (req, res) => {
         res.json({ success: true, count: recipes.length, recipes });
     } catch (error) {
         console.error("Server Error:", error);
-        res.status(500).json({ success: false, message: "Something went wrong! Maybe the Maharaj is sleeping." });
+        res.status(500).json({ success: false, message: error.message || "Something went wrong! Maybe the Maharaj is sleeping." });
     }
 });
 
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
-    console.log(`Mode: ${process.env.API_KEY ? 'Active' : 'Missing API Key'}`);
+    const keyStatus = (process.env.API_KEY || process.env.GEMINI_API_KEY) ? 'Active' : 'Missing API Key';
+    console.log(`Mode: ${keyStatus}`);
 });
