@@ -13,6 +13,7 @@
 ---
 
 [**Try YumCha.ai Live**](https://yumcha-ai-qle1.onrender.com/)
+[**Alternate Link (vercel)**](https://yumcha-ai.vercel.app/)
 
 ---
 
