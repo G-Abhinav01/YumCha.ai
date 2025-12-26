@@ -1,9 +1,31 @@
 {
     "version": 2,
-    "rewrites": [
+    "builds": [
         {
-            "source": "/(.*)",
-            "destination": "/backend/server.js"
+            "src": "backend/server.js",
+            "use": "@vercel/node"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/api/(.*)",
+            "dest": "backend/server.js"
+        },
+        {
+            "src": "/images/(.*)",
+            "dest": "frontend/images/$1"
+        },
+        {
+            "src": "/audio/(.*)",
+            "dest": "frontend/audio/$1"
+        },
+        {
+            "src": "/(.*\\.(css|js))",
+            "dest": "frontend/$1"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "frontend/index.html"
         }
     ]
 }
