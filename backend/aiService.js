@@ -2,18 +2,26 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 const { constructPrompt } = require("./promptTemplates");
 require("dotenv").config();
 
-// Initialize Gemini
-const apiKey = process.env.API_KEY || process.env.GEMINI_API_KEY;
-if (!apiKey) {
-    console.error("CRITICAL: API Key is missing in aiService.js!");
-} else {
-    console.log(`AI Service: API Key loaded (Starts with: ${apiKey.substring(0, 4)}...)`);
+function getApiKey() {
+    return (
+        process.env.GEMINI_API_KEY ||
+        process.env.API_KEY ||
+        process.env.GOOGLE_API_KEY ||
+        process.env.GOOGLE_AI_API_KEY ||
+        ""
+    ).trim();
 }
 
-const genAI = new GoogleGenerativeAI(apiKey || "YOUR_API_KEY_HERE");
-
 async function generateRecipes(userData, imageBuffer = null, mimeType = null) {
+    const apiKey = getApiKey();
+    if (!apiKey || apiKey === "YOUR_API_KEY_HERE") {
+        throw new Error(
+            "API Key is missing on the server. Please set GEMINI_API_KEY, API_KEY, or GOOGLE_API_KEY in your Render environment variables."
+        );
+    }
+
     try {
+        const genAI = new GoogleGenerativeAI(apiKey);
         // Model identifier - defaults to gemini-1.5-flash (or GEMINI_MODEL env var)
         const modelName = process.env.GEMINI_MODEL || "gemini-1.5-flash";
         const model = genAI.getGenerativeModel({ model: modelName });
