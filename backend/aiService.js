@@ -14,8 +14,9 @@ const genAI = new GoogleGenerativeAI(apiKey || "YOUR_API_KEY_HERE");
 
 async function generateRecipes(userData, imageBuffer = null, mimeType = null) {
     try {
-        // User explicitly requested gemini-2.5-flash
-        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+        // Model identifier - defaults to gemini-1.5-flash (or GEMINI_MODEL env var)
+        const modelName = process.env.GEMINI_MODEL || "gemini-1.5-flash";
+        const model = genAI.getGenerativeModel({ model: modelName });
 
         let prompt = constructPrompt(userData);
         let contentParts = [prompt];
