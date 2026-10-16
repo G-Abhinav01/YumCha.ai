@@ -22,8 +22,9 @@ async function generateRecipes(userData, imageBuffer = null, mimeType = null) {
 
     try {
         const genAI = new GoogleGenerativeAI(apiKey);
-        // Default to gemini-2.5-flash with fallback options
-        const primaryModel = process.env.GEMINI_MODEL || "gemini-2.5-flash";
+        // Active model recommended by Google API
+        const modelName = process.env.GEMINI_MODEL || "gemini-3.8-flash";
+        const model = genAI.getGenerativeModel({ model: modelName });
 
         let prompt = constructPrompt(userData);
         let contentParts = [prompt];
@@ -38,21 +39,7 @@ async function generateRecipes(userData, imageBuffer = null, mimeType = null) {
             contentParts[0] += "\n[IMAGE CONTEXT]: An image of ingredients/dish is attached. Analyze it to suggest recipes.";
         }
 
-        let result;
-        try {
-            const model = genAI.getGenerativeModel({ model: primaryModel });
-            result = await model.generateContent(contentParts);
-        } catch (modelErr) {
-            // If primary model is not found, fallback to gemini-2.0-flash
-            if (modelErr.message && modelErr.message.includes("404") && primaryModel !== "gemini-2.0-flash") {
-                console.warn(`Model ${primaryModel} failed with 404, attempting fallback to gemini-2.0-flash...`);
-                const fallbackModel = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-                result = await fallbackModel.generateContent(contentParts);
-            } else {
-                throw modelErr;
-            }
-        }
-
+        const result = await model.generateContent(contentParts);
         const response = await result.response;
         const text = response.text();
 
