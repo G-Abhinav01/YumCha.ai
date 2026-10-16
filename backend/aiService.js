@@ -12,6 +12,52 @@ function getApiKey() {
     ).trim();
 }
 
+async function callGeminiWithRetry(genAI, contentParts, primaryModelName) {
+    // Unique list of models to try in order of preference
+    const candidateModels = Array.from(new Set([
+        primaryModelName,
+        "gemini-3.8-flash",
+        "gemini-2.5-flash-lite",
+        "gemini-2.5-flash"
+    ])).filter(Boolean);
+
+    let lastError = null;
+
+    for (const modelName of candidateModels) {
+        // Try up to 2 times if we hit transient 503 spikes
+        for (let attempt = 1; attempt <= 2; attempt++) {
+            try {
+                console.log(`[AI Service] Invoking model '${modelName}' (attempt ${attempt})...`);
+                const model = genAI.getGenerativeModel({ model: modelName });
+                const result = await model.generateContent(contentParts);
+                return result;
+            } catch (err) {
+                lastError = err;
+                const msg = err.message || "";
+                const isOverloaded = msg.includes("503") || msg.includes("high demand") || msg.includes("Service Unavailable");
+                const isUnavailable = msg.includes("404") || msg.includes("not found") || msg.includes("no longer available");
+
+                if (isUnavailable) {
+                    console.warn(`[AI Service] Model '${modelName}' unavailable (404). Trying next model...`);
+                    break;
+                }
+
+                if (isOverloaded && attempt < 2) {
+                    console.warn(`[AI Service] Model '${modelName}' hit 503 high demand spike. Retrying in 1.5s...`);
+                    await new Promise((res) => setTimeout(res, 1500));
+                    continue;
+                }
+
+                // If attempts exhausted or other error, break to try fallback model
+                console.warn(`[AI Service] Model '${modelName}' failed: ${msg}. Trying next candidate...`);
+                break;
+            }
+        }
+    }
+
+    throw lastError;
+}
+
 async function generateRecipes(userData, imageBuffer = null, mimeType = null) {
     const apiKey = getApiKey();
     if (!apiKey || apiKey === "YOUR_API_KEY_HERE") {
@@ -22,9 +68,7 @@ async function generateRecipes(userData, imageBuffer = null, mimeType = null) {
 
     try {
         const genAI = new GoogleGenerativeAI(apiKey);
-        // Active model recommended by Google API
-        const modelName = process.env.GEMINI_MODEL || "gemini-3.8-flash";
-        const model = genAI.getGenerativeModel({ model: modelName });
+        const preferredModel = process.env.GEMINI_MODEL || "gemini-3.8-flash";
 
         let prompt = constructPrompt(userData);
         let contentParts = [prompt];
@@ -39,7 +83,7 @@ async function generateRecipes(userData, imageBuffer = null, mimeType = null) {
             contentParts[0] += "\n[IMAGE CONTEXT]: An image of ingredients/dish is attached. Analyze it to suggest recipes.";
         }
 
-        const result = await model.generateContent(contentParts);
+        const result = await callGeminiWithRetry(genAI, contentParts, preferredModel);
         const response = await result.response;
         const text = response.text();
 
