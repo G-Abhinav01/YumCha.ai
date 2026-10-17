@@ -4,220 +4,332 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YumCha.ai | Hyperlocal Cooking</title>
-    <link rel="stylesheet" href="yumcha.css">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <!-- Font Awesome CDN -->
+    <title>YumCha.ai | Hyperlocal Culinary AI</title>
+    <meta name="description" content="AI-powered cooking assistant that curates personalized Indian recipes from pantry ingredients in seconds.">
+    
+    <!-- Modern Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="yumcha.css?v=4">
 </head>
 
 <body>
+    <!-- Ambient Background Lighting -->
+    <div class="ambient-glow ambient-amber"></div>
+    <div class="ambient-glow ambient-cyan"></div>
+    <div class="ambient-glow ambient-emerald"></div>
 
-    <!-- Navbar (Minimal & Translucent) -->
+    <!-- Floating Island Navbar -->
     <nav class="glass-nav" id="navbar">
-        <div class="logo-container">
-            <span>YumCha.ai</span>
+        <div class="nav-inner">
+            <div class="logo-container" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" role="button" tabindex="0">
+                <div class="logo-icon-badge">
+                    <i class="fa-solid fa-fire-burner"></i>
+                </div>
+                <div class="logo-text-group">
+                    <span class="logo-title">YumCha<span class="logo-accent">.ai</span></span>
+                    <span class="logo-sub">HYPERLOCAL CHEF</span>
+                </div>
+            </div>
+
+            <!-- Desktop Links -->
+            <div class="nav-links" id="nav-links">
+                <a href="#" class="nav-link active">Home</a>
+                <a href="#recipe-studio" class="nav-link">Studio</a>
+                <a href="#reach-out" class="nav-link">Connect</a>
+                <a href="https://github.com/G-Abhinav01/YumCha.ai" target="_blank" rel="noopener noreferrer" class="nav-github-btn" aria-label="GitHub Repository">
+                    <i class="fa-brands fa-github"></i>
+                    <span>Star on GitHub</span>
+                </a>
+            </div>
+
+            <!-- Mobile Hamburger Toggle -->
+            <button class="mobile-toggle-btn" id="mobile-toggle" aria-label="Toggle Navigation Menu" aria-expanded="false">
+                <span class="bar bar-1"></span>
+                <span class="bar bar-2"></span>
+                <span class="bar bar-3"></span>
+            </button>
         </div>
 
-        <!-- Collapsed Menu Icon (Visible on Scroll) -->
-        <div class="menu-icon-container">
-            <i class="fa-solid fa-bars"></i>
-        </div>
-
-        <div class="nav-links">
-            <a href="#" class="nav-link active">Home</a>
-            <a href="#reach-out" class="nav-link">About Us</a>
-            <a href="https://github.com/G-Abhinav01/YumCha.ai" target="_blank" class="social-btn nav-social-btn"
-                aria-label="Project Repo">
+        <!-- Mobile Dropdown Menu -->
+        <div class="mobile-nav-drawer" id="mobile-drawer">
+            <a href="#" class="mobile-link active" onclick="closeMobileMenu()">Home</a>
+            <a href="#recipe-studio" class="mobile-link" onclick="closeMobileMenu()">Recipe Studio</a>
+            <a href="#reach-out" class="mobile-link" onclick="closeMobileMenu()">Connect with Maharaj</a>
+            <a href="https://github.com/G-Abhinav01/YumCha.ai" target="_blank" rel="noopener noreferrer" class="mobile-github-btn" onclick="closeMobileMenu()">
                 <i class="fa-brands fa-github"></i>
+                <span>View Source Code</span>
             </a>
         </div>
     </nav>
 
-    <!-- Hero Section (16:9 Banner) -->
+    <!-- Hero Section -->
     <header class="hero-banner">
         <div class="hero-content">
-            <img src="/images/YumCha.jpg" alt="YumCha Logo" class="hero-logo">
-            <h1 class="glitch-text" data-text="Let Him COOK">Let Him COOK 🧑🏻‍🍳🥧</h1>
-            <p class="subtitle">Hyperlocal Cooking, Powered by AI</p>
+            <div class="hero-eyebrow">
+                <span class="eyebrow-dot"></span>
+                <span>Hyperlocal Cooking • Powered by Google Gemini</span>
+            </div>
+
+            <div class="hero-avatar-wrapper">
+                <img src="/images/YumCha.jpg" alt="YumCha Maharaj Mascot" class="hero-logo">
+                <div class="avatar-ring"></div>
+            </div>
+
+            <h1 class="hero-title">
+                Let Him <span class="gradient-text">COOK.</span>
+            </h1>
+            
+            <p class="subtitle">
+                Turn whatever is in your fridge into authentic, regional Indian flavors. Tailored for bachelors, hostellers, and everyday foodies.
+            </p>
+
+            <div class="hero-metrics">
+                <div class="metric-pill">
+                    <i class="fa-solid fa-bolt"></i>
+                    <span>Instant Speed</span>
+                </div>
+                <div class="metric-pill">
+                    <i class="fa-solid fa-pepper-hot"></i>
+                    <span>Spice Calibrated</span>
+                </div>
+                <div class="metric-pill">
+                    <i class="fa-solid fa-wrench"></i>
+                    <span>Jugaad Enabled</span>
+                </div>
+            </div>
         </div>
     </header>
 
-    <!-- Main Container -->
-    <main class="container">
-
-        <!-- Input Method Toggle -->
-        <div class="input-toggle">
-            <button class="toggle-btn active" id="btn-text" onclick="switchMode('text')">Text Input</button>
-            <button class="toggle-btn" id="btn-image" onclick="switchMode('image')">Upload Image</button>
-        </div>
-
-        <!-- Forms -->
-        <div id="form-container">
-
-            <!-- Text Input Form -->
-            <div id="text-form" class="form-section active">
-                <input type="text" id="dish-input" placeholder="e.g. Paneer Butter Masala, or just 'Paneer'"
-                    class="glass-input">
-                <textarea id="ingredients-input" placeholder="Ingredients you have (optional)..."
-                    class="glass-input"></textarea>
-            </div>
-
-            <!-- Image Input Form -->
-            <div id="image-form" class="form-section">
-                <div class="upload-box" onclick="document.getElementById('image-upload').click()">
-                    <span id="file-name">Click to Upload Ingredients Image</span>
-                    <input type="file" id="image-upload" accept="image/*" hidden>
+    <!-- Main Container / Studio Card -->
+    <main class="container" id="recipe-studio">
+        <div class="studio-card">
+            
+            <div class="studio-header">
+                <div class="studio-title-group">
+                    <span class="section-tag">STEP 01</span>
+                    <h2>Configure Your Kitchen</h2>
+                </div>
+                
+                <!-- Input Method Toggle -->
+                <div class="input-toggle">
+                    <button class="toggle-btn active" id="btn-text" onclick="switchMode('text')">
+                        <i class="fa-solid fa-pen-fancy"></i>
+                        <span>Text Prompt</span>
+                    </button>
+                    <button class="toggle-btn" id="btn-image" onclick="switchMode('image')">
+                        <i class="fa-solid fa-camera"></i>
+                        <span>Upload Photo</span>
+                    </button>
                 </div>
             </div>
 
-            <!-- Filters -->
-            <!-- Filters (Custom Components) -->
-            <div class="filters-grid">
+            <!-- Forms Container -->
+            <div id="form-container">
 
-                <!-- Skill Level Custom Select -->
-                <div class="filter-group">
-                    <label>Skill Level</label>
-                    <div class="custom-select-wrapper" id="skill-select-wrapper">
-                        <div class="custom-select-trigger">
-                            <span>Office Tiffin (Intermediate)</span>
-                            <i class="fa-solid fa-chevron-down arrow"></i>
+                <!-- Text Input Form -->
+                <div id="text-form" class="form-section active">
+                    <div class="input-group">
+                        <label for="dish-input" class="field-label">
+                            <span>What are you craving?</span>
+                            <span class="field-hint">Dish name or style</span>
+                        </label>
+                        <input type="text" id="dish-input" placeholder="e.g. Paneer Butter Masala, Egg Curry, or Dal Khichdi" class="glass-input">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="ingredients-input" class="field-label">
+                            <span>Pantry Ingredients on Hand</span>
+                            <span class="field-hint">Optional</span>
+                        </label>
+                        <textarea id="ingredients-input" rows="3" placeholder="e.g. 2 onions, curd, tomatoes, kasuri methi, ginger, garlic..." class="glass-input"></textarea>
+                    </div>
+                </div>
+
+                <!-- Image Input Form -->
+                <div id="image-form" class="form-section">
+                    <div class="upload-box" id="drop-zone" onclick="document.getElementById('image-upload').click()">
+                        <div class="upload-icon-circle">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
                         </div>
-                        <div class="custom-options">
-                            <div class="custom-option" data-value="novice">Hostel Quickie (Novice)</div>
-                            <div class="custom-option selected" data-value="intermediate">Office Tiffin (Intermediate)
+                        <span id="file-name" class="upload-primary-text">Click or drag & drop an ingredients photo</span>
+                        <span class="upload-subtext">JPG, PNG, WEBP up to 10MB</span>
+                        <input type="file" id="image-upload" accept="image/*" hidden>
+                    </div>
+                </div>
+
+                <!-- Filters Section -->
+                <div class="filters-divider">
+                    <span>CULINARY PARAMETERS</span>
+                </div>
+
+                <div class="filters-grid">
+
+                    <!-- Skill Level Custom Select -->
+                    <div class="filter-group">
+                        <label class="filter-title"><i class="fa-solid fa-graduation-cap"></i> Skill Level</label>
+                        <div class="custom-select-wrapper" id="skill-select-wrapper">
+                            <div class="custom-select-trigger">
+                                <span>Office Tiffin (Intermediate)</span>
+                                <i class="fa-solid fa-chevron-down arrow"></i>
                             </div>
-                            <div class="custom-option" data-value="high">Maa ke Haath Jaisa (High)</div>
-                            <div class="custom-option" data-value="pro-max">Shaadi Party Vala (Pro Max)</div>
+                            <div class="custom-options">
+                                <div class="custom-option" data-value="novice">Hostel Quickie (Novice)</div>
+                                <div class="custom-option selected" data-value="intermediate">Office Tiffin (Intermediate)</div>
+                                <div class="custom-option" data-value="high">Maa ke Haath Jaisa (High)</div>
+                                <div class="custom-option" data-value="pro-max">Shaadi Party Vala (Pro Max)</div>
+                            </div>
+                            <input type="hidden" id="skill-level" value="intermediate">
                         </div>
-                        <!-- Hidden input to store value -->
-                        <input type="hidden" id="skill-level" value="intermediate">
                     </div>
+
+                    <!-- Spice Level Custom Select -->
+                    <div class="filter-group">
+                        <label class="filter-title"><i class="fa-solid fa-pepper-hot"></i> Spice Threshold</label>
+                        <div class="custom-select-wrapper" id="spice-select-wrapper">
+                            <div class="custom-select-trigger">
+                                <span>Moderate 🌶️</span>
+                                <i class="fa-solid fa-chevron-down arrow"></i>
+                            </div>
+                            <div class="custom-options">
+                                <div class="custom-option" data-value="low">No Spice 🥛</div>
+                                <div class="custom-option" data-value="mild">Less Spicy 🟢</div>
+                                <div class="custom-option selected" data-value="moderate">Moderate 🌶️</div>
+                                <div class="custom-option" data-value="high">Very Hot 🔥</div>
+                            </div>
+                            <input type="hidden" id="spice-level" value="moderate">
+                        </div>
+                    </div>
+
+                    <!-- Regional Preference -->
+                    <div class="filter-group full-width">
+                        <label for="region-input" class="filter-title"><i class="fa-solid fa-earth-asia"></i> Regional Flair (Optional)</label>
+                        <input type="text" id="region-input" placeholder="e.g. Punjabi, Hyderabadi, Chettinad, Bengali, Maharashtrian..." class="glass-input small">
+                    </div>
+
+                    <!-- Preference Toggles -->
+                    <div class="filter-group full-width toggles-card">
+                        <div class="toggles-grid">
+                            <!-- Jugaad Toggle -->
+                            <div class="toggle-row">
+                                <div class="checkbox-wrapper-41">
+                                    <input type="checkbox" id="jugaad-check">
+                                </div>
+                                <label for="jugaad-check" class="toggle-label-wrap">
+                                    <span class="toggle-name">Allow Jugaad</span>
+                                    <span class="toggle-desc">Smart substitutions for missing spices</span>
+                                </label>
+                            </div>
+
+                            <!-- Measurement Toggle -->
+                            <div class="toggle-row">
+                                <div class="checkbox-wrapper-41">
+                                    <input type="checkbox" id="measurement-check">
+                                </div>
+                                <label for="measurement-check" class="toggle-label-wrap">
+                                    <span class="toggle-name">Desi Measurements</span>
+                                    <span class="toggle-desc">Use katori, pinch, spoon & glass</span>
+                                </label>
+                            </div>
+
+                            <!-- Language Toggle -->
+                            <div class="toggle-row">
+                                <div class="checkbox-wrapper-41">
+                                    <input type="checkbox" id="language-check">
+                                </div>
+                                <label for="language-check" class="toggle-label-wrap">
+                                    <span class="toggle-name">Hinglish Tone</span>
+                                    <span class="toggle-desc">Conversational Hindi + English blend</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
-                <!-- Spice Level Custom Select -->
-                <div class="filter-group">
-                    <label>Spice Level</label>
-                    <div class="custom-select-wrapper" id="spice-select-wrapper">
-                        <div class="custom-select-trigger">
-                            <span>Moderate</span>
-                            <i class="fa-solid fa-chevron-down arrow"></i>
-                        </div>
-                        <div class="custom-options">
-                            <div class="custom-option" data-value="low">No Spice 🍃</div>
-                            <div class="custom-option" data-value="mild">Less Spicy 🥒</div>
-                            <div class="custom-option selected" data-value="moderate">Moderate 🌶️</div>
-                            <div class="custom-option" data-value="high">Very Hot 🔥</div>
-                        </div>
-                        <input type="hidden" id="spice-level" value="moderate">
-                    </div>
-                </div>
-
-                <div class="filter-group checkbox-group">
-
-                    <!-- Jugaad Toggle -->
-                    <div class="toggle-row">
-                        <div class="checkbox-wrapper-41">
-                            <input type="checkbox" id="jugaad-check">
-                        </div>
-                        <label for="jugaad-check" class="toggle-label">Allow Jugaad (Substitutes)?</label>
-                    </div>
-
-                    <!-- Measurement Toggle -->
-                    <div class="toggle-row">
-                        <div class="checkbox-wrapper-41">
-                            <input type="checkbox" id="measurement-check">
-                        </div>
-                        <label for="measurement-check" class="toggle-label">Use Local Measurements
-                            (Katori/Pinch)?</label>
-                    </div>
-
-                    <!-- Language Toggle -->
-                    <div class="toggle-row">
-                        <div class="checkbox-wrapper-41">
-                            <input type="checkbox" id="language-check">
-                        </div>
-                        <label for="language-check" class="toggle-label">Enable Hinglish (Hindi + English)?</label>
-                    </div>
-
-                </div>
-
-                <div class="filter-group">
-                    <label>Region Preference (Optional)</label>
-                    <input type="text" id="region-input" placeholder="e.g. Punjabi, South Indian..."
-                        class="glass-input small">
+                <!-- Premium CTA Button (Preserving original structure & glow) -->
+                <div class="cta-container">
+                    <button class="premium-cook-btn" onclick="generateRecipes()" id="cook-button">
+                        <span class="btn-border-trail"></span>
+                        <span class="btn-content">Let Him COOK 🔥👨‍🍳</span>
+                    </button>
+                    <p class="cta-subnote">Curating 3 customized recipes via Maharaj intelligence</p>
                 </div>
 
             </div>
-
-            <!-- Premium CTA Button -->
-            <div class="cta-container">
-                <button class="premium-cook-btn" onclick="generateRecipes()">
-                    <span class="btn-border-trail"></span> <!-- The rotating red light -->
-                    <span class="btn-content">Let Him COOK 🧑🏻‍🍳🥧</span>
-                </button>
-            </div>
-
         </div>
-
     </main>
 
     <!-- Loading Animation -->
     <div id="loading-overlay" class="hidden">
-        <img src="/images/cooking.gif" alt="Cooking..." class="cooking-gif">
-
-        <div class="glossy-loading-box">
-            <p class="loading-text" id="typing-text"></p>
-            <span class="cursor">|</span>
+        <div class="loading-modal-card">
+            <img src="/images/cooking.gif" alt="Cooking in progress..." class="cooking-gif">
+            <div class="glossy-loading-box">
+                <p class="loading-text" id="typing-text"></p>
+                <span class="cursor">|</span>
+            </div>
+            <div class="loading-stepper">
+                <span class="stepper-dot active"></span>
+                <span class="stepper-dot active"></span>
+                <span class="stepper-dot"></span>
+            </div>
         </div>
     </div>
 
     <!-- Results Section -->
-    <section id="results-section" class="hidden">
-        <h2>Suggestions for You</h2>
+    <section id="results-section" class="hidden container">
+        <div class="results-header">
+            <div>
+                <span class="section-tag">CURATED FEAST</span>
+                <h2 class="results-title">Maharaj's Recommended Dishes</h2>
+            </div>
+            <button class="re-roll-btn" onclick="document.getElementById('recipe-studio').scrollIntoView({behavior: 'smooth'})">
+                <i class="fa-solid fa-sliders"></i>
+                <span>Tweak Recipe Preferences</span>
+            </button>
+        </div>
+        
         <div id="recipe-grid" class="recipe-grid">
-            <!-- Recipe Cards will be injected here -->
+            <!-- Dynamic Recipe Cards -->
         </div>
     </section>
 
     <!-- Social Footer Section -->
     <footer class="social-footer" id="reach-out">
-        <h3>Reach out to Us</h3>
-        <div class="social-container">
-            <a href="mailto:abhinav.achiver@gmail.com" class="social-btn" aria-label="Email">
-                <i class="fa-regular fa-envelope"></i>
-            </a>
+        <div class="footer-container">
+            <div class="footer-brand">
+                <div class="footer-logo">
+                    <i class="fa-solid fa-fire-burner"></i>
+                    <span>YumCha.ai</span>
+                </div>
+                <p class="footer-tagline">Crafted with precision for home cooks, students, and flavor enthusiasts worldwide.</p>
+            </div>
 
-            <a href="https://x.com/GAbhinav_001" target="_blank" class="social-btn" aria-label="Twitter">
-                <i class="fa-brands fa-x-twitter"></i>
-            </a>
+            <div class="social-container">
+                <a href="mailto:abhinav.achiver@gmail.com" class="social-btn" aria-label="Email"><i class="fa-regular fa-envelope"></i></a>
+                <a href="https://x.com/GAbhinav_001" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="https://www.instagram.com/achiver_abhinav/" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://www.linkedin.com/in/g-abhinav-138a39252/" target="_blank" rel="noopener noreferrer" class="social-btn active" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                <a href="https://github.com/G-Abhinav01" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+                <a href="https://abhinav-achiver001.medium.com/" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Medium"><i class="fa-brands fa-medium"></i></a>
+                <a href="https://hashnode.com/@achiver-abhinav" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Blog"><i class="fa-solid fa-blog"></i></a>
+            </div>
 
-            <a href="https://www.instagram.com/achiver_abhinav/" target="_blank" class="social-btn"
-                aria-label="Instagram">
-                <i class="fa-brands fa-instagram"></i>
-            </a>
-
-            <a href="https://www.linkedin.com/in/g-abhinav-138a39252/" target="_blank" class="social-btn active"
-                aria-label="LinkedIn">
-                <i class="fa-brands fa-linkedin-in"></i>
-            </a>
-
-            <a href="https://github.com/G-Abhinav01" target="_blank" class="social-btn" aria-label="GitHub">
-                <i class="fa-brands fa-github"></i>
-            </a>
-
-            <a href="https://abhinav-achiver001.medium.com/" target="_blank" class="social-btn" aria-label="Medium">
-                <i class="fa-brands fa-medium"></i>
-            </a>
-
-            <a href="https://hashnode.com/@achiver-abhinav" target="_blank" class="social-btn" aria-label="Blog">
-                <i class="fa-solid fa-blog"></i>
-            </a>
+            <div class="footer-bottom">
+                <p class="copyright">© 2026 G Abhinav (achiver-abhinav). All rights reserved.</p>
+                <div class="footer-badge">Hyperlocal Culinary Intelligence</div>
+            </div>
         </div>
-        <p class="copyright">achiver-abhinav © All rights reserved</p>
     </footer>
 
-    <script src="script.js?v=3"></script>
+    <!-- Frontend Script -->
+    <script src="script.js?v=4"></script>
 </body>
 
 </html>

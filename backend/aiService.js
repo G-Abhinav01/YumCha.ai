@@ -23,12 +23,20 @@ async function callGeminiWithRetry(genAI, contentParts, primaryModelName) {
 
     let lastError = null;
 
+    const fastGenConfig = {
+        responseMimeType: "application/json",
+        temperature: 0.7,
+        maxOutputTokens: 2048,
+    };
+
     for (const modelName of candidateModels) {
-        // Try up to 2 times if we hit transient 503 spikes
         for (let attempt = 1; attempt <= 2; attempt++) {
             try {
                 console.log(`[AI Service] Invoking model '${modelName}' (attempt ${attempt})...`);
-                const model = genAI.getGenerativeModel({ model: modelName });
+                const model = genAI.getGenerativeModel({
+                    model: modelName,
+                    generationConfig: fastGenConfig,
+                });
                 const result = await model.generateContent(contentParts);
                 return result;
             } catch (err) {
@@ -43,12 +51,11 @@ async function callGeminiWithRetry(genAI, contentParts, primaryModelName) {
                 }
 
                 if (isOverloaded && attempt < 2) {
-                    console.warn(`[AI Service] Model '${modelName}' hit 503 high demand spike. Retrying in 1.5s...`);
-                    await new Promise((res) => setTimeout(res, 1500));
+                    console.warn(`[AI Service] Model '${modelName}' hit 503 high demand spike. Retrying in 1.2s...`);
+                    await new Promise((res) => setTimeout(res, 1200));
                     continue;
                 }
 
-                // If attempts exhausted or other error, break to try fallback model
                 console.warn(`[AI Service] Model '${modelName}' failed: ${msg}. Trying next candidate...`);
                 break;
             }
