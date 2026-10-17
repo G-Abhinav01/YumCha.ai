@@ -38,8 +38,12 @@ app.post('/api/generate', upload.single('image'), async (req, res) => {
 
         const recipes = await generateRecipes(userData, imageFile ? imageFile.buffer : null, imageFile ? imageFile.mimetype : null);
 
-        if (recipes.error) {
-            return res.status(500).json({ success: false, message: "Failed to parse recipes." });
+        if (recipes.error || !Array.isArray(recipes) || recipes.length === 0) {
+            console.error("Recipe generation failed to produce array. Payload:", recipes);
+            return res.status(500).json({
+                success: false,
+                message: (recipes && recipes.error) || "Failed to parse recipes."
+            });
         }
 
         res.json({ success: true, count: recipes.length, recipes });
@@ -52,8 +56,8 @@ app.post('/api/generate', upload.single('image'), async (req, res) => {
 if (require.main === module) {
     app.listen(PORT, () => {
         console.log(`Server running on http://localhost:${PORT}`);
-        const keyStatus = (process.env.API_KEY || process.env.GEMINI_API_KEY) ? 'Active' : 'Missing API Key';
-        console.log(`Mode: ${keyStatus}`);
+        const hasKey = !!(process.env.API_KEY || process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY);
+        console.log(`Mode: ${hasKey ? 'Active' : 'Missing API Key'}`);
     });
 }
 

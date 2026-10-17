@@ -12,8 +12,56 @@ function getApiKey() {
     ).trim();
 }
 
+function normalizeRecipes(data) {
+    if (Array.isArray(data)) return data;
+    if (data && typeof data === "object") {
+        if (Array.isArray(data.recipes)) return data.recipes;
+        if (Array.isArray(data.data)) return data.data;
+        if (Array.isArray(data.dishes)) return data.dishes;
+        if (Array.isArray(data.items)) return data.items;
+        if (data.name && data.ingredients) return [data];
+    }
+    return null;
+}
+
+function extractJson(text) {
+    if (!text || typeof text !== "string") return null;
+
+    let clean = text.replace(/```json/gi, "").replace(/```/gi, "").trim();
+
+    // 1. Direct parse attempt
+    try {
+        const parsed = JSON.parse(clean);
+        const normalized = normalizeRecipes(parsed);
+        if (normalized) return normalized;
+    } catch (e) {}
+
+    // 2. Extract [ ... ] array
+    const startArr = clean.indexOf('[');
+    const endArr = clean.lastIndexOf(']');
+    if (startArr !== -1 && endArr > startArr) {
+        try {
+            const arr = JSON.parse(clean.substring(startArr, endArr + 1));
+            const normalized = normalizeRecipes(arr);
+            if (normalized) return normalized;
+        } catch (e) {}
+    }
+
+    // 3. Extract { ... } object containing array
+    const startObj = clean.indexOf('{');
+    const endObj = clean.lastIndexOf('}');
+    if (startObj !== -1 && endObj > startObj) {
+        try {
+            const obj = JSON.parse(clean.substring(startObj, endObj + 1));
+            const normalized = normalizeRecipes(obj);
+            if (normalized) return normalized;
+        } catch (e) {}
+    }
+
+    return null;
+}
+
 async function callGeminiWithRetry(genAI, contentParts, primaryModelName) {
-    // Unique list of models to try in order of preference
     const candidateModels = Array.from(new Set([
         primaryModelName,
         "gemini-3.8-flash",
@@ -23,10 +71,11 @@ async function callGeminiWithRetry(genAI, contentParts, primaryModelName) {
 
     let lastError = null;
 
+    // Generous token budget to completely prevent truncated JSON
     const fastGenConfig = {
         responseMimeType: "application/json",
         temperature: 0.7,
-        maxOutputTokens: 2048,
+        maxOutputTokens: 4096,
     };
 
     for (const modelName of candidateModels) {
@@ -94,15 +143,13 @@ async function generateRecipes(userData, imageBuffer = null, mimeType = null) {
         const response = await result.response;
         const text = response.text();
 
-        // Basic Cleanup if model returns markdown
-        const cleanedText = text.replace(/```json/g, "").replace(/```/g, "").trim();
-
-        try {
-            return JSON.parse(cleanedText);
-        } catch (e) {
-            console.error("Failed to parse JSON:", text);
-            return { error: "Failed to generate valid JSON content", raw: text };
+        const parsedRecipes = extractJson(text);
+        if (parsedRecipes && Array.isArray(parsedRecipes) && parsedRecipes.length > 0) {
+            return parsedRecipes;
         }
+
+        console.error("Failed to parse valid recipes from model output:", text);
+        return { error: "Failed to parse recipes from model output", raw: text };
 
     } catch (error) {
         console.error("AI Generation Error:", error);
